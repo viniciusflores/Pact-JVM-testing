@@ -9,37 +9,46 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Todo {
 
-	private Long id;
-	private String task;
-	@DateTimeFormat(pattern="dd/MM/yyyy")
-	private LocalDate dueDate;
-	
-	public Long getId() {
-		return id;
-	}
+    private Long id;
+    private String task;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dueDate;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Todo() {
+    }
 
-	public String getTask() {
-		return task;
-	}
+    public Todo(Long id, String task, LocalDate dueDate) {
+	this.id = id;
+	this.task = task;
+	this.dueDate = dueDate;
+    }
 
-	public void setTask(String task) {
-		this.task = task;
-	}
-	
-	public LocalDate getDueDate() {
-		return dueDate;
-	}
+    public Long getId() {
+	return id;
+    }
 
-	public void setDueDate(LocalDate dueDate) {
-		this.dueDate = dueDate;
-	}
+    public void setId(Long id) {
+	this.id = id;
+    }
 
-	@Override
-	public String toString() {
-		return "Todo [id=" + id + ", task=" + task + ", dueDate=" + dueDate + "]";
-	}
+    public String getTask() {
+	return task;
+    }
+
+    public void setTask(String task) {
+	this.task = task;
+    }
+
+    public LocalDate getDueDate() {
+	return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+	this.dueDate = dueDate;
+    }
+
+    @Override
+    public String toString() {
+	return "Todo [id=" + id + ", task=" + task + ", dueDate=" + dueDate + "]";
+    }
 }
