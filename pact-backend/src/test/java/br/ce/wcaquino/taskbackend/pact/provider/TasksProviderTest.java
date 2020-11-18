@@ -1,6 +1,8 @@
 package br.ce.wcaquino.taskbackend.pact.provider;
 
+import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
+import org.springframework.boot.SpringApplication;
 
 import au.com.dius.pact.provider.junit.PactRunner;
 import au.com.dius.pact.provider.junit.target.HttpTarget;
@@ -9,6 +11,7 @@ import au.com.dius.pact.provider.junitsupport.State;
 import au.com.dius.pact.provider.junitsupport.loader.PactUrl;
 import au.com.dius.pact.provider.junitsupport.target.Target;
 import au.com.dius.pact.provider.junitsupport.target.TestTarget;
+import br.ce.wcaquino.taskbackend.TaskBackendApplication;
 
 @RunWith(PactRunner.class)
 @Provider("Tasks")
@@ -17,6 +20,11 @@ import au.com.dius.pact.provider.junitsupport.target.TestTarget;
 public class TasksProviderTest {
     @TestTarget
     public final Target target = new HttpTarget("localhost", 8000);
+
+    @BeforeClass
+    public static void setup() {
+	SpringApplication.run(TaskBackendApplication.class);
+    }
 
     @State("There is a task with id = 1")
     public void saveTask1() {
