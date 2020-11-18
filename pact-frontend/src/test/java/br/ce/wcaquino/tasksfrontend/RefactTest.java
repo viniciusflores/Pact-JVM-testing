@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import br.ce.wcaquino.tasksfrontend.controller.TasksController;
+import br.ce.wcaquino.tasksfrontend.repositories.TasksRepository;
 
 public class RefactTest {
     @Test
@@ -21,6 +22,12 @@ public class RefactTest {
 	port.set(service, "8000");
 	Model model = new RedirectAttributesModelMap();
 	service.index(model);
+	System.out.println(model.getAttribute("todos"));
+    }
 
+    @Test
+    public void after() {
+	TasksRepository repo = new TasksRepository("http://localhost:8000");
+	System.out.println(repo.getTodos()[0]);
     }
 }
