@@ -21,6 +21,29 @@
 		<pact.version>4.1.7</pact.version>
 	</properties>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>au.com.dius.pact.provider</groupId>
+				<artifactId>maven</artifactId>
+				<version>${pact.version}</version>
+				<configuration>
+					<serviceProviders>
+						<serviceProvider>
+							<name>Tasks</name>
+							<protocol>http</protocol>
+							<host>localhost</host>
+							<port>8000</port>
+							<path>/</path>
+							<pactFileDirectory>src/test/resources</pactFileDirectory>
+						</serviceProvider>
+					</serviceProviders>
+					<trimSnapshot>true</trimSnapshot>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -36,11 +59,6 @@
 			<artifactId>mockito-all</artifactId>
 			<version>1.10.19</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>au.com.dius.pact.provider</groupId>
-			<artifactId>junit</artifactId>
-			<version>${pact.version}</version>
 		</dependency>
 	</dependencies>
 </project>
