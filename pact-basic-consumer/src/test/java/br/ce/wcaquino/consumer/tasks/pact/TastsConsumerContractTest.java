@@ -1,6 +1,7 @@
 package br.ce.wcaquino.consumer.tasks.pact;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
@@ -9,6 +10,8 @@ import org.apache.http.client.ClientProtocolException;
 import org.junit.Rule;
 import org.junit.Test;
 
+import au.com.dius.pact.consumer.dsl.DslPart;
+import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit.PactProviderRule;
 import au.com.dius.pact.consumer.junit.PactVerification;
@@ -23,9 +26,10 @@ public class TastsConsumerContractTest {
 
     @Pact(consumer = "BasicConsumer")
     public RequestResponsePact createPact(PactDslWithProvider builder) {
+	DslPart body = new PactDslJsonBody().numberType("id", 1L).stringType("task").stringType("dueDate");
+
 	return builder.given("There is a task with id = 1").uponReceiving("Retrieve Task #1").path("/todo/1")
-		.method("GET").willRespondWith().status(200)
-		.body("{\"id\":1,\"task\":\"Task from pact\",\"dueDate\":\"2020-01-01\"}").toPact();
+		.method("GET").willRespondWith().status(200).body(body).toPact();
     }
 
     @Test
@@ -41,6 +45,6 @@ public class TastsConsumerContractTest {
 
 	// Assert
 	assertThat(task.getId(), is(1L));
-	assertThat(task.getTask(), is("Task from pact"));
+	assertThat(task.getTask(), is(notNullValue()));
     }
 }
