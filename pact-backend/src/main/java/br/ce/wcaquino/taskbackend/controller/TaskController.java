@@ -1,6 +1,8 @@
 package br.ce.wcaquino.taskbackend.controller;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,52 +22,60 @@ import br.ce.wcaquino.taskbackend.utils.DateUtils;
 import br.ce.wcaquino.taskbackend.utils.ValidationException;
 
 @RestController
-@RequestMapping(value ="/todo")
+@RequestMapping(value = "/todo")
 public class TaskController {
 
-	private TaskRepo todoRepo = new TaskRepo();
-	
-	@GetMapping
-	public List<Task> findAll() {
-		return todoRepo.findAll();
-	}
-	
-	@PostMapping
-	public ResponseEntity<Task> save(@RequestBody Task todo) throws ValidationException {
-		if(todo.getTask() == null || todo.getTask() == "") {
-			throw new ValidationException("Fill the task description");
-		}
-		if(todo.getDueDate() == null) {
-			throw new ValidationException("Fill the due date");
-		}
-		if(!DateUtils.isEqualOrFutureDate(todo.getDueDate())) {
-			throw new ValidationException("Due date must not be in past");
-		}
-		Task saved = todoRepo.save(todo);
-		return new ResponseEntity<Task>(saved, HttpStatus.CREATED);
-	}
-	
+    private TaskRepo todoRepo = new TaskRepo();
 
-	@PutMapping(value = "/{id}")
-	public ResponseEntity<Task> update(@PathVariable Long id, @RequestBody Task todo) throws ValidationException {
-		if(todo.getTask() == null || todo.getTask() == "") {
-			throw new ValidationException("Fill the task description");
-		}
-		if(todo.getDueDate() == null) {
-			throw new ValidationException("Fill the due date");
-		}
-		Task updated = todoRepo.update(new Task(id, todo.getTask(), todo.getDueDate()));
-		return new ResponseEntity<Task>(updated, HttpStatus.OK);
+    @GetMapping
+    public List<Task> findAll() {
+	return todoRepo.findAll();
+    }
+
+    @PostMapping
+    public ResponseEntity<Task> save(@RequestBody Task todo) throws ValidationException {
+	if (todo.getTask() == null || todo.getTask() == "") {
+	    throw new ValidationException("Fill the task description");
 	}
-	
-	@DeleteMapping(value = "/{id}")
-	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void delete(@PathVariable Long id) {
-		todoRepo.deleteById(id);
+	if (todo.getDueDate() == null) {
+	    throw new ValidationException("Fill the due date");
 	}
-	
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<Task> getById(@PathVariable Long id) {
-		return new ResponseEntity<Task>(todoRepo.get(id), HttpStatus.OK);
+	if (!DateUtils.isEqualOrFutureDate(todo.getDueDate())) {
+	    throw new ValidationException("Due date must not be in past");
 	}
+	Task saved = todoRepo.save(todo);
+	return new ResponseEntity<Task>(saved, HttpStatus.CREATED);
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Task> update(@PathVariable Long id, @RequestBody Task todo) throws ValidationException {
+	if (todo.getTask() == null || todo.getTask() == "") {
+	    throw new ValidationException("Fill the task description");
+	}
+	if (todo.getDueDate() == null) {
+	    throw new ValidationException("Fill the due date");
+	}
+	Task updated = todoRepo.update(new Task(id, todo.getTask(), todo.getDueDate()));
+	return new ResponseEntity<Task>(updated, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+	todoRepo.deleteById(id);
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Task> getById(@PathVariable Long id) {
+	return new ResponseEntity<Task>(todoRepo.get(id), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/pactStateChange")
+    public void stateChange(@RequestBody Map<String, Object> body) {
+	String state = (String) body.get("state");
+	if (state.equals("There is a task with id = 1")) {
+	    todoRepo.update(new Task(1L, "Task #1", LocalDate.now()));
+	}
+    }
+
 }
