@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -30,10 +31,13 @@ public class CreateTaskTest {
 		.array("dueDate").numberType(LocalDate.now().getYear()).numberType(LocalDate.now().getMonthValue())
 		.numberType(LocalDate.now().getDayOfMonth()).closeArray();
 
-	DslPart responseBody = new PactDslJsonBody().numberType("id").stringType("task", "New Task")
-		// .date("dueDate","yyyy-MM-dd", new Date());
-		.array("dueDate").numberType(LocalDate.now().getYear()).numberType(LocalDate.now().getMonthValue())
-		.numberType(LocalDate.now().getDayOfMonth()).closeArray();
+	DslPart responseBody = new PactDslJsonBody().numberType("id").stringType("task", "New Task").date("dueDate",
+		"yyyy-MM-dd", new Date());
+	/*
+	 * .array("dueDate").numberType(LocalDate.now().getYear()).numberType(LocalDate.
+	 * now().getMonthValue())
+	 * .numberType(LocalDate.now().getDayOfMonth()).closeArray();
+	 */
 
 	return builder.uponReceiving("Create a task").path("/todo").method("POST")
 		.matchHeader("Content-type", "application/json.*", "application/json").body(requestBody)
