@@ -27,6 +27,7 @@
 							<host>localhost</host>
 							<port>8000</port>
 							<path>/</path>
+							<stateChangeUrl>http://localhost:8000/todo/pactStateChange</stateChangeUrl>
 						</serviceProvider>
 					</serviceProviders>
 					<pactBrokerUrl>http://localhost:9080</pactBrokerUrl>
@@ -47,6 +48,11 @@
 		<dependency>
 			<groupId>au.com.dius.pact.consumer</groupId>
 			<artifactId>junit</artifactId>
+			<version>${pact.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>au.com.dius.pact.consumer</groupId>
+			<artifactId>java8</artifactId>
 			<version>${pact.version}</version>
 		</dependency>
 		<dependency>
