@@ -1,6 +1,7 @@
 package br.ce.wcaquino.tasksfrontend.pact.consumer;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import java.time.LocalDate;
@@ -25,11 +26,12 @@ public class GetTaskByIdTest {
 
     @Pact(consumer = "TasksFront")
     public RequestResponsePact createPact(PactDslWithProvider builder) {
-	DslPart body = new PactDslJsonBody().numberType("id", 1L).stringType("task", "Remember the Gym").date("dueDate",
-		"yyyy-MM-dd", new Date());
+	DslPart body = new PactDslJsonBody().numberType("id", 1L).stringType("task").date("dueDate", "yyyy-MM-dd",
+		new Date());
 
-	return builder.given("There is a task with id = 1").uponReceiving("Retrieve Task #1").path("/todo/1")
-		.method("GET").willRespondWith().status(200).body(body).toPact();
+	return builder.given("There is a task with id = 1").uponReceiving("Retrieve Task #1")
+		// .path("/todo/1")
+		.matchPath("/todo/\\d+", "/todo/1").method("GET").willRespondWith().status(200).body(body).toPact();
     }
 
     @Test
@@ -43,7 +45,7 @@ public class GetTaskByIdTest {
 
 	// Assert
 	assertThat(task.getId(), is(1L));
-	assertThat(task.getTask(), is("Remember the Gym"));
+	assertThat(task.getTask(), is(notNullValue()));
 	assertThat(task.getDueDate(), is(LocalDate.now()));
     }
 }
