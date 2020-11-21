@@ -28,8 +28,8 @@ public class LoginTest {
 
 	PactDslJsonBody responseBody = new PactDslJsonBody().stringType("token");
 
-	return builder.given("Your user is created").uponReceiving("Signin with a valid user").method("POST")
-		.path("/signin").body(requestBody).willRespondWith().status(200).body(responseBody).toPact();
+	return builder.given("Your user is created").uponReceiving("Signin with a valid user").path("/signin")
+		.method("POST").body(requestBody).willRespondWith().status(200).body(responseBody).toPact();
     }
 
     @Test
