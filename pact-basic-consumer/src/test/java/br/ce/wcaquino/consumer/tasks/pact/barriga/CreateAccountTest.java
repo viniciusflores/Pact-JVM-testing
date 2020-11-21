@@ -2,7 +2,6 @@ package br.ce.wcaquino.consumer.tasks.pact.barriga;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
@@ -20,19 +19,17 @@ public class CreateAccountTest {
 
     @Test
     public void test() {
-	PactDslJsonBody requestBody = new PactDslJsonBody().stringValue("nome", "Acc test");
-	PactDslJsonBody responseBody = new PactDslJsonBody().numberType("id").stringValue("nome", "Acc test");
+	PactDslJsonBody requestBody = new PactDslJsonBody().stringValue("nome", "Account Updated");
 
 	RequestResponsePact pact = ConsumerPactBuilder.consumer("BasicConsumer").hasPactWith("Barriga")
-		.given("There is no account with the name 'Acc test'").uponReceiving("Insert account 'Acc test'")
-		.path("/contas").method("POST").matchHeader("Authorization", "JWT .*", TOKEN).body(requestBody)
-		.willRespondWith().status(201).body(responseBody).toPact();
+		.given("There is the account #1000").uponReceiving("Update existing account").path("/contas/1000")
+		.method("POST").matchHeader("Authorization", "JWT .*", TOKEN).body(requestBody).willRespondWith()
+		.status(200).toPact();
 
 	MockProviderConfig config = MockProviderConfig.createDefault();
 	PactVerificationResult result = ConsumerPactRunnerKt.runConsumerTest(pact, config, (mockServer, context) -> {
 	    BarrigaConsumer consumer = new BarrigaConsumer(mockServer.getUrl());
-	    String id = consumer.insertAccount("Acc test", TOKEN);
-	    assertThat(id, is(notNullValue()));
+	    consumer.updateAccount("1000", "Account Updated", TOKEN);
 	    return null;
 	});
 
