@@ -35,6 +35,7 @@
 							<host>barrigarest.wcaquino.me</host>
 							<port>443</port>
 							<path>/</path>
+							<stateChangeUrl>http://localhost:8000/barrigaPactStateChange</stateChangeUrl>
 						</serviceProvider>
 					</serviceProviders>
 					<pactBrokerUrl>http://localhost:9080</pactBrokerUrl>
